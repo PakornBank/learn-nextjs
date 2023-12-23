@@ -7,6 +7,7 @@ import {
   LatestInvoiceRaw,
   User,
   Revenue,
+  Invoice,
 } from './definitions';
 import { formatCurrency } from './utils';
 
@@ -227,5 +228,59 @@ export async function getUser(email: string) {
   } catch (error) {
     console.error('Failed to fetch user:', error);
     throw new Error('Failed to fetch user.');
+  }
+}
+
+export async function fetchTotalPaidInvoices() {
+  try {
+    const totalPaidInvoices = await sql`
+      SELECT COUNT(*) 
+      FROM invoices 
+      WHERE status = 'paid'
+      `;
+    return parseInt(totalPaidInvoices.rows[0].count, 10);
+  } catch (error) {
+    console.error('Failed to fetch paid invoice:', error);
+    throw new Error('Failed to fetch paid invoice.');
+  }
+}
+
+export async function fetchTotalPendingInvoices() {
+  try {
+    const totalPendingInvoices = await sql`
+      SELECT COUNT(*) 
+      FROM invoices 
+      WHERE status = 'pending'
+      `;
+    return parseInt(totalPendingInvoices.rows[0].count, 10);
+  } catch (error) {
+    console.error('Failed to fetch pending invoice:', error);
+    throw new Error('Failed to fetch pending invoice.');
+  }
+}
+
+export async function fetchTotalInvoices() {
+  try {
+    const totalInvoices = await sql`
+      SELECT COUNT(*) 
+      FROM invoices
+      `;
+    return parseInt(totalInvoices.rows[0].count, 10);
+  } catch (error) {
+    console.error('Failed to fetch total invoice:', error);
+    throw new Error('Failed to fetch total invoice.');
+  }
+}
+
+export async function fetchTotalCustomers() {
+  try {
+    const totalCustomers = await sql`
+      SELECT COUNT(*) 
+      FROM customers
+      `;
+    return parseInt(totalCustomers.rows[0].count, 10);
+  } catch (error) {
+    console.error('Failed to fetch total customer:', error);
+    throw new Error('Failed to fetch total customer.');
   }
 }
